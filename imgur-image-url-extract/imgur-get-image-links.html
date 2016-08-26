@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Pull Imgur</title>
+    <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha256-cCueBR6CsyA4/9szpPfrX3s49M9vUU5BgtiJj06wt/s=" crossorigin="anonymous"></script>
+</head>
+<body>
+
+<script>
+    //var album = "tdU8x";
+    var pageUrl = "http://imgur.com/a/tdU8x";
+
+    var regex = new RegExp("imgur.com/a/([a-z0-9]+)", "i");
+
+    // pull out the album id from the link
+    var result = regex.exec(pageUrl);
+    var album = result[1];
+
+    // IMGUR API endpoint for retrieving album data
+    var url = "https://api.imgur.com/3/album/" + album;
+
+    console.log("Calling API url: " + url);
+
+    $.ajax({
+        url: url,
+        beforeSend: function (request)
+        {
+            request.setRequestHeader("Authorization", "Client-ID 51a9099a33f1ff2");
+        },
+        success: function(response) {
+            console.log(response);
+            if(!response.success) {
+                alert("Problem with api call: success=false");
+                return;
+            }
+            var images = response.data.images;
+            // create a map from image ID to image url
+            var imageUrls = {};
+            for(var x=0;x<images.length;x++) {
+                var image = images[x];
+                imageUrls[image.id] = image.link;
+            }
+
+            alert(JSON.stringify(imageUrls));
+        }
+    });
+</script>
+</body>
+</html>
