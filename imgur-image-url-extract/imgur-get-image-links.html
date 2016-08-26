@@ -10,6 +10,7 @@
 <script>
     //var album = "tdU8x";
     var pageUrl = "http://imgur.com/a/tdU8x";
+    var API_KEY = "";
 
     var regex = new RegExp("imgur.com/a/([a-z0-9]+)", "i");
 
@@ -26,7 +27,7 @@
         url: url,
         beforeSend: function (request)
         {
-            request.setRequestHeader("Authorization", "Client-ID 51a9099a33f1ff2");
+            request.setRequestHeader("Authorization", "Client-ID " + API_KEY);
         },
         success: function(response) {
             console.log(response);
